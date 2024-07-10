@@ -77,4 +77,15 @@ class APILoisirs {
       throw Exception('Erreur lors de la récupération des notes du loisir');
     }
   }
+  // Mettre à jour un loisir par son id
+  static Future<void> updateLoisir(int id, Map<String, dynamic> loisir) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/loisir/$id'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(loisir),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Erreur lors de la mise à jour du loisir');
+    }
+  }
 }

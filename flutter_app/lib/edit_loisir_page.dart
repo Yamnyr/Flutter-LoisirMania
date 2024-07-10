@@ -42,13 +42,13 @@ class _EditLoisirPageState extends State<EditLoisirPage> {
         _isLoading = true;
       });
       try {
-        // await APILoisirs.updateLoisir(widget.loisir['idloisir'], {
-        //   'type': _type,
-        //   'nom': _nom,
-        //   'images': _images,
-        //   'description': _description,
-        //   'date_sortie': _dateSortie.toIso8601String(),
-        // });
+        await APILoisirs.updateLoisir(widget.loisir['idloisir'], {
+          'type': _type,
+          'nom': _nom,
+          'images': _images,
+          'description': _description,
+          'date_sortie': _dateSortie.toIso8601String(),
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Loisir mis à jour avec succès!')),
         );
