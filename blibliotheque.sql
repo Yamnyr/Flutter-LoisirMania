@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3308
--- Généré le :  mer. 10 juil. 2024 à 07:26
+-- Généré le :  mer. 10 juil. 2024 à 07:54
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -38,7 +38,15 @@ CREATE TABLE IF NOT EXISTS `loisir` (
   `date_sortie` date NOT NULL,
   PRIMARY KEY (`idloisir`),
   KEY `fk_type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `loisir`
+--
+
+INSERT INTO `loisir` (`idloisir`, `type`, `nom`, `images`, `description`, `date_sortie`) VALUES
+(1, 1, 'hp1', '', 'harry potter', '2024-07-24'),
+(2, 1, 'hp2', '', 'harry potter 2', '2024-07-19');
 
 -- --------------------------------------------------------
 
@@ -53,7 +61,17 @@ CREATE TABLE IF NOT EXISTS `note` (
   `note` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_loisir` (`loisir`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `note`
+--
+
+INSERT INTO `note` (`id`, `loisir`, `note`) VALUES
+(1, 1, 20),
+(2, 1, 0),
+(3, 2, 20),
+(4, 2, 20);
 
 -- --------------------------------------------------------
 
@@ -66,7 +84,14 @@ CREATE TABLE IF NOT EXISTS `type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nom` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+--
+-- Déchargement des données de la table `type`
+--
+
+INSERT INTO `type` (`id`, `nom`) VALUES
+(1, 'Livre');
 
 --
 -- Contraintes pour les tables déchargées
