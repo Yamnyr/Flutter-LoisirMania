@@ -26,16 +26,19 @@ app.get('/api/index', async (req, res) => {
                 l.idloisir,
                 l.type,
                 l.nom,
+                t.nom as nom_type,
                 l.images,
                 l.description,
                 l.date_sortie,
                 AVG(n.note) AS moyenne_notes
             FROM 
                 loisir l
-            LEFT JOIN 
-                note n ON l.idloisir = n.loisir
+            LEFT JOIN
+                type t ON l.type = t.id
+            WHERE 
+                l.idloisir = ?
             GROUP BY 
-                l.idloisir, l.type, l.nom, l.images, l.description, l.date_sortie
+                l.idloisir, l.type, t.nom, l.nom, l.images, l.description, l.date_sortie
         `);
         const groupedByType = rows[0].reduce((acc, loisir) => {
             const type = loisir.type;
@@ -88,6 +91,7 @@ app.get('/api/loisir/:id', async (req, res) => {
                 l.idloisir, 
                 l.type, 
                 l.nom, 
+                t.nom as nom_type,
                 l.images, 
                 l.description, 
                 l.date_sortie, 
@@ -96,10 +100,12 @@ app.get('/api/loisir/:id', async (req, res) => {
                 loisir l
             LEFT JOIN 
                 note n ON l.idloisir = n.loisir
+            LEFT JOIN
+                type t ON l.type = t.id
             WHERE 
                 l.idloisir = ?
             GROUP BY 
-                l.idloisir, l.type, l.nom, l.images, l.description, l.date_sortie
+                l.idloisir, l.type, t.nom, l.nom, l.images, l.description, l.date_sortie
         `, [id]);
         res.status(200).json(rows[0]);
     } catch (err) {
@@ -126,6 +132,32 @@ app.post('/api/loisir', async (req, res) => {
     }
 });
 
+// Route pour modifier un loisir
+app.put('/api/loisir/:id', async (req, res) => {
+    let conn;
+    let id = req.params.id;
+    let { type, nom, images, description, date_sortie } = req.body;
+
+    // Valider les entrées
+    if (!type || !nom || !images || !description || !date_sortie) {
+        return res.status(400).json({ message: 'Toutes les informations du loisir sont requises.' });
+    }
+
+    try {
+        conn = await pool.getConnection();
+        const result = await conn.query(`
+            UPDATE loisir 
+            SET type = ?, nom = ?, images = ?, description = ?, date_sortie = ? 
+            WHERE idloisir = ?
+        `, [type, nom, images, description, date_sortie, id]);
+        res.status(200).json({ message: 'Loisir modifié avec succès !' });
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ message: 'Erreur lors de la modification du loisir !' });
+    } finally {
+        if (conn) conn.release();
+    }
+});
 //ajouter des notes 
 app.post('/api/loisir/:id/note', async (req, res) => {
     let conn;
