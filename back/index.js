@@ -74,6 +74,7 @@ app.get('/api/loisirs', async (req, res) => {
             SELECT 
                 l.idloisir, 
                 t.nom AS nom_type, 
+                l.type,
                 l.nom, 
                 l.images, 
                 l.description, 
