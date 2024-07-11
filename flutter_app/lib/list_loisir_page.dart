@@ -100,7 +100,11 @@ class _ListLoisirPageState extends State<ListLoisirPage> {
               height: 50, // Adjust the height according to your needs
             ),
             SizedBox(width: 10),
-            Text('Liste des Loisirs'),
+            Text('Liste des Loisirs',style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'FiraSans',
+                      color: Color.fromARGB(255, 47, 112, 175),
+                    )),
           ],
         ),
       ),
@@ -172,11 +176,11 @@ class _ListLoisirPageState extends State<ListLoisirPage> {
             label: 'Accueil',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
+            icon: Icon(Icons.list),
             label: 'Liste',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.add),
             label: 'Ajouter',
           ),
         ],

@@ -49,7 +49,11 @@ class _ShowLoisirPageState extends State<ShowLoisirPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Détails du loisir'),
+        title: Text('Détails du loisir',style: TextStyle(
+                      fontSize: 20,
+                      color: Color.fromARGB(255, 47, 112, 175),
+                      fontFamily: 'FiraSans',
+                    )),
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: loisirDetails,
@@ -101,7 +105,7 @@ class _ShowLoisirPageState extends State<ShowLoisirPage> {
                             children: [
                               Text(
                                 loisir['nom'],
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'FiraSans', color: Color.fromARGB(255, 47, 112, 175)),
                               ),
                               Row(
                                 children: [
@@ -136,7 +140,7 @@ class _ShowLoisirPageState extends State<ShowLoisirPage> {
                               children: [
                                 Text(
                                   'Ajouter une note:',
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'FiraSans'),
                                 ),
                                 SizedBox(height: 8),
                                 RatingBar.builder(

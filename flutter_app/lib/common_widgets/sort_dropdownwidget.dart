@@ -28,11 +28,17 @@ class SortButton extends StatelessWidget {
         itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
           PopupMenuItem<String>(
             value: 'Alphabetique',
-            child: Text('Alphabétique'),
+            child: Text('Alphabétique', style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Numans',
+                    )),
           ),
           PopupMenuItem<String>(
             value: 'Date',
-            child: Text('Date'),
+            child: Text('Date', style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Numans',
+                    )),
           ),
         ],
       ),

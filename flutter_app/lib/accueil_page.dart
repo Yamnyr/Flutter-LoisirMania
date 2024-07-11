@@ -3,7 +3,7 @@ import 'package:flutter_app/common_widgets/filter_dropdownwidget.dart';
 import 'package:flutter_app/common_widgets/loisir_card_widget.dart';
 import 'package:flutter_app/add_loisir_page.dart';
 import 'app.API/API_loisirs.dart';
-import 'common_widgets/filter_dropdownwidget.dart'; // Importez votre nouveau widget
+import 'common_widgets/filter_dropdownwidget.dart';
 
 class AccueilPage extends StatefulWidget {
   @override
@@ -63,7 +63,11 @@ class _AccueilPageState extends State<AccueilPage> {
               height: 50, // Adjust the height according to your needs
             ),
             SizedBox(width: 10),
-            Text('Le top 5'),
+            Text('Le top 5',style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'FiraSans',
+                      color: Color.fromARGB(255, 47, 112, 175)
+                    )),
           ],
         ),
       ),
@@ -143,13 +147,14 @@ class _AccueilPageState extends State<AccueilPage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Accueil',
+            
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
+            icon: Icon(Icons.list),
             label: 'Liste',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.add),
             label: 'Ajouter',
           ),
         ],

@@ -66,7 +66,11 @@ class _AddLoisirPageState extends State<AddLoisirPage> {
               height: 50, // Adjust the height according to your needs
             ),
             SizedBox(width: 10),
-            Text('Ajouter un Loisir'),
+            Text('Ajouter un Loisir',style: TextStyle(
+                      fontSize: 20,
+                      color: Color.fromARGB(255, 47, 112, 175),
+                      fontFamily: 'FiraSans',
+                    )),
           ],
         ),
       ),
@@ -88,7 +92,7 @@ class _AddLoisirPageState extends State<AddLoisirPage> {
                       children: [
                         Text(
                           'Nouveau loisir',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Color.fromARGB(255, 47, 112, 175)),
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Color.fromARGB(255, 47, 112, 175), fontFamily: 'FiraSans'),
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(height: 16),
@@ -101,7 +105,10 @@ class _AddLoisirPageState extends State<AddLoisirPage> {
                           items: _types.map((type) {
                             return DropdownMenuItem<String>(
                               value: type['value'],
-                              child: Text(type['label']!),
+                              child: Text(type['label']!,style: TextStyle(
+                              fontSize: 14,
+                              fontFamily: 'Numans',
+                            )),
                             );
                           }).toList(),
                           onChanged: (value) {
@@ -153,7 +160,10 @@ class _AddLoisirPageState extends State<AddLoisirPage> {
                         SizedBox(height: 24),
                         ElevatedButton(
                           onPressed: _submitForm,
-                          child: Text('Ajouter le loisir'),
+                          child: Text('Ajouter le loisir',style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Numans',
+                          )),
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white,
                             backgroundColor: Color.fromARGB(255, 128, 100, 145),

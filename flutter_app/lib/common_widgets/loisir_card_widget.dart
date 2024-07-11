@@ -53,12 +53,13 @@ class LoisirCard extends StatelessWidget {
                         children: [
                           Text(
                             loisir['nom'],
-                            style: TextStyle(color: Color.fromARGB(255, 47, 112, 175), fontSize: 20, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: Color.fromARGB(255, 47, 112, 175), fontSize: 20, fontWeight: FontWeight.bold,fontFamily: 'FiraSans'),
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             'Type: ${loisir['nom_type']}',
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 16, 
+                              fontFamily: 'Numans',),
                           ),
                         ],
                       ),
@@ -77,19 +78,25 @@ class LoisirCard extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 8),
-                Text(
-                  loisir['description'],
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 14),
-                ),
+                  Text(
+                    loisir['description'],
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Numans',
+                    ),
+                  ),
                 SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton.icon(
                       icon: Icon(Icons.visibility),
-                      label: Text('Voir'),
+                      label: Text('Voir', style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Numans',
+                    )),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -105,7 +112,10 @@ class LoisirCard extends StatelessWidget {
                     SizedBox(width: 8),
                     ElevatedButton.icon(
                       icon: Icon(Icons.edit),
-                      label: Text('Modifier'),
+                      label: Text('Modifier', style: TextStyle(
+                      fontSize: 14,
+                      fontFamily: 'Numans',
+                    )),
                       onPressed: () {
                         Navigator.push(
                           context,

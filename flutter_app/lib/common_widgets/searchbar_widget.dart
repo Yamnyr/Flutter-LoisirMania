@@ -41,7 +41,7 @@ class SearchBarr extends StatelessWidget {
             contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
           ),
           onChanged: onChanged,
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 16,fontFamily: 'Numans',),
         ),
       ),
     );

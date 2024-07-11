@@ -81,7 +81,11 @@ class _EditLoisirPageState extends State<EditLoisirPage> {
               height: 50, // Adjust the height according to your needs
             ),
             SizedBox(width: 10),
-            Text('Modifier le Loisir'),
+            Text('Modifier le Loisir',style: TextStyle(
+                      fontSize: 20,
+                      color: Color.fromARGB(255, 47, 112, 175),
+                      fontFamily: 'FiraSans',
+                    )),
           ],
         ),
       ),
@@ -103,7 +107,7 @@ class _EditLoisirPageState extends State<EditLoisirPage> {
                       children: [
                         Text(
                           'Modifier le loisir',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 47, 112, 175),),
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 47, 112, 175),fontFamily: 'FiraSans'),
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(height: 16),
@@ -171,7 +175,10 @@ class _EditLoisirPageState extends State<EditLoisirPage> {
                         SizedBox(height: 24),
                         ElevatedButton(
                           onPressed: _submitForm,
-                          child: Text('Mettre à jour le loisir'),
+                          child: Text('Mettre à jour le loisir',style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'Numans',
+                          )),
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white,
                             backgroundColor: Color.fromARGB(255, 128, 100, 145),
