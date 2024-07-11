@@ -58,7 +58,17 @@ class _AddLoisirPageState extends State<AddLoisirPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ajouter un loisir'),
+        title: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              height: 50, // Adjust the height according to your needs
+            ),
+            SizedBox(width: 10),
+            Text('Ajouter un Loisir'),
+          ],
+        ),
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())

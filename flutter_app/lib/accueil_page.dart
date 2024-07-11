@@ -55,7 +55,17 @@ class _AccueilPageState extends State<AccueilPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Le Top 5'),
+        title: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              height: 50, // Adjust the height according to your needs
+            ),
+            SizedBox(width: 10),
+            Text('Le top 5'),
+          ],
+        ),
       ),
       body: Column(
         children: [

@@ -65,34 +65,44 @@ class _ListLoisirPageState extends State<ListLoisirPage> {
     });
   }
 
-void _onItemTapped(int index) {
-  switch (index) {
-    case 0:
-      Navigator.pushReplacementNamed(context, '/accueil');
-      break;
-    case 1:
-      Navigator.pushReplacementNamed(context, '/list_loisir');
-      break;
-    case 2:
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => AddLoisirPage()),
-      ).then((value) {
-        _refreshList();
-      });
-      break;
-    default:
+  void _onItemTapped(int index) {
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/accueil');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/list_loisir');
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddLoisirPage()),
+        ).then((value) {
+          _refreshList();
+        });
+        break;
+      default:
+    }
+    setState(() {
+      _selectedIndex = index; // Mettez à jour l'index sélectionné
+    });
   }
-  setState(() {
-    _selectedIndex = index; // Mettez à jour l'index sélectionné
-  });
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Liste des Loisirs'),
+        title: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              height: 50, // Adjust the height according to your needs
+            ),
+            SizedBox(width: 10),
+            Text('Liste des Loisirs'),
+          ],
+        ),
       ),
       body: Column(
         children: [

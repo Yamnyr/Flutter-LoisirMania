@@ -72,8 +72,18 @@ class _EditLoisirPageState extends State<EditLoisirPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Modifier le loisir'),
+            appBar: AppBar(
+        title: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/logo.png',
+              height: 50, // Adjust the height according to your needs
+            ),
+            SizedBox(width: 10),
+            Text('Modifier le Loisir'),
+          ],
+        ),
       ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
@@ -93,7 +103,7 @@ class _EditLoisirPageState extends State<EditLoisirPage> {
                       children: [
                         Text(
                           'Modifier le loisir',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color.fromARGB(255, 47, 112, 175),),
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(height: 16),
