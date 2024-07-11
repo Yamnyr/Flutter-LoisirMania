@@ -6,7 +6,7 @@ class APILoisirs {
 
   // Récupérer le top 5 par loisir
   static Future<Map<String, dynamic>> getTop5ByType() async {
-    final response = await http.get(Uri.parse('$baseUrl/index'));
+    final response = await http.get(Uri.parse('$baseUrl/loisirs/gettop5'));
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -16,7 +16,7 @@ class APILoisirs {
 
   // Récupérer tous les loisirs avec leurs moyennes
   static Future<List<dynamic>> getAllLoisirs() async {
-    final response = await http.get(Uri.parse('$baseUrl/loisirs'));
+    final response = await http.get(Uri.parse('$baseUrl/loisirs/getall'));
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -26,7 +26,7 @@ class APILoisirs {
 
   // Récupérer un loisir par son id
   static Future<Map<String, dynamic>> getLoisirById(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/loisir/$id'));
+    final response = await http.get(Uri.parse('$baseUrl/loisirs/getonebyid/$id'));
     if (response.statusCode == 200) {
       return json.decode(response.body)[0];
     } else {
@@ -37,7 +37,7 @@ class APILoisirs {
   // Ajouter un loisir
   static Future<void> addLoisir(Map<String, dynamic> loisir) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/loisir'),
+      Uri.parse('$baseUrl/loisirs/add'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode(loisir),
     );
@@ -49,7 +49,7 @@ class APILoisirs {
   // Ajouter une note à un loisir
   static Future<void> addNote(int loisirId, double note) async {
     final response = await http.post(
-      Uri.parse('$baseUrl/loisir/$loisirId/note'),
+      Uri.parse('$baseUrl/loisirs/addnote/$loisirId'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode({'note': note}),
     );
@@ -60,7 +60,7 @@ class APILoisirs {
 
   // Récupérer tous les types
   static Future<List<dynamic>> getAllTypes() async {
-    final response = await http.get(Uri.parse('$baseUrl/types'));
+    final response = await http.get(Uri.parse('$baseUrl/types/getall'));
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -70,7 +70,7 @@ class APILoisirs {
 
   // Récupérer les notes d'un loisir par son id
   static Future<List<dynamic>> getNotesByLoisirId(int id) async {
-    final response = await http.get(Uri.parse('$baseUrl/loisir/$id/notes'));
+    final response = await http.get(Uri.parse('$baseUrl/loisirs/getnote/$id'));
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -80,7 +80,7 @@ class APILoisirs {
   // Mettre à jour un loisir par son id
   static Future<void> updateLoisir(int id, Map<String, dynamic> loisir) async {
     final response = await http.put(
-      Uri.parse('$baseUrl/loisir/$id'),
+      Uri.parse('$baseUrl/loisirs/edit/$id'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode(loisir),
     );

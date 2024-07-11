@@ -17,7 +17,7 @@ const pool = mariadb.createPool({
 });
 
 //Route pour récupérer le top 5 par loisir
-app.get('/api/index', async (req, res) => {
+app.get('/api/loisirs/gettop5', async (req, res) => {
     let conn;
     try {
         conn = await pool.getConnection();
@@ -66,7 +66,7 @@ app.get('/api/index', async (req, res) => {
 });
 
 // Route pour récupérer tous les loisirs avec leur moyennes
-app.get('/api/loisirs', async (req, res) => {
+app.get('/api/loisirs/getall', async (req, res) => {
     let conn;
     try {
         conn = await pool.getConnection();
@@ -101,7 +101,7 @@ app.get('/api/loisirs', async (req, res) => {
 });
 
 // Route pour récupérer un loisir par son id
-app.get('/api/loisir/:id', async (req, res) => {
+app.get('/api/loisirs/getonebyid/:id', async (req, res) => {
     let conn;
     let id = req.params.id;
     try {
@@ -137,7 +137,7 @@ app.get('/api/loisir/:id', async (req, res) => {
 });
 
 // Route pour ajouter un loisir
-app.post('/api/loisir', async (req, res) => {
+app.post('/api/loisirs/add', async (req, res) => {
     let conn;
     try {
         let { type, nom, images, description, date_sortie } = req.body;
@@ -153,7 +153,7 @@ app.post('/api/loisir', async (req, res) => {
 });
 
 // Route pour modifier un loisir
-app.put('/api/loisir/:id', async (req, res) => {
+app.put('/api/loisirs/edit/:id', async (req, res) => {
     let conn;
     let id = req.params.id;
     let { type, nom, images, description, date_sortie } = req.body;
@@ -179,7 +179,7 @@ app.put('/api/loisir/:id', async (req, res) => {
     }
 });
 //ajouter des notes
-app.post('/api/loisir/:id/note', async (req, res) => {
+app.post('/api/loisirs/addnote/:id', async (req, res) => {
     let conn;
     let id = req.params.id;
     let { note } = req.body;
@@ -202,7 +202,7 @@ app.post('/api/loisir/:id/note', async (req, res) => {
     }
 });
 // Route pour récupérer tous les types
-app.get('/api/types', async (req, res) => {
+app.get('/api/types/getall', async (req, res) => {
     let conn;
     try {
         conn = await pool.getConnection();
@@ -217,7 +217,7 @@ app.get('/api/types', async (req, res) => {
 });
 
 // Route pour récupérer les notes d'un loisir par son id
-app.get('/api/loisir/:id/notes', async (req, res) => {
+app.get('/api/loisirs/getnote/:id', async (req, res) => {
     let conn;
     let id = req.params.id;
     try {
