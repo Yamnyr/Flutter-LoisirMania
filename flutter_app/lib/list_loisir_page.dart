@@ -65,28 +65,28 @@ class _ListLoisirPageState extends State<ListLoisirPage> {
     });
   }
 
-  void _onItemTapped(int index) {
-    switch (index) {
-      case 0:
-        Navigator.pushReplacementNamed(context, '/accueil');
-        break;
-      case 1:
-        Navigator.pushReplacementNamed(context, '/list_loisir');
-        break;
-      case 2:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => AddLoisirPage()),
-        ).then((value) {
-          _refreshList();
-        });
-        break;
-      default:
-    }
-    setState(() {
-      _selectedIndex = index;
-    });
+void _onItemTapped(int index) {
+  switch (index) {
+    case 0:
+      Navigator.pushReplacementNamed(context, '/accueil');
+      break;
+    case 1:
+      Navigator.pushReplacementNamed(context, '/list_loisir');
+      break;
+    case 2:
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AddLoisirPage()),
+      ).then((value) {
+        _refreshList();
+      });
+      break;
+    default:
   }
+  setState(() {
+    _selectedIndex = index; // Mettez à jour l'index sélectionné
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +171,7 @@ class _ListLoisirPageState extends State<ListLoisirPage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color.fromARGB(255, 8, 163, 111),
+        selectedItemColor: Color.fromARGB(255, 47, 112, 175),
         onTap: _onItemTapped,
       ),
     );

@@ -24,6 +24,9 @@ class _EditLoisirPageState extends State<EditLoisirPage> {
     '1': 'Film',
     '2': 'Série',
     '3': 'Livre',
+    '4': 'BD',
+    '5': 'Comics',
+    '6': 'Mangas',
   };
 
   @override

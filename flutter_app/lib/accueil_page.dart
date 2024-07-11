@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/common_widgets/filter_dropdownwidget.dart';
 import 'package:flutter_app/common_widgets/loisir_card_widget.dart';
 import 'package:flutter_app/add_loisir_page.dart';
 import 'app.API/API_loisirs.dart';
+import 'common_widgets/filter_dropdownwidget.dart'; // Importez votre nouveau widget
 
 class AccueilPage extends StatefulWidget {
   @override
@@ -24,6 +26,7 @@ class _AccueilPageState extends State<AccueilPage> {
       topLoisirs = APILoisirs.getTop5ByType();
     });
   }
+
 
   void _onItemTapped(int index) {
     switch (index) {
@@ -56,49 +59,18 @@ class _AccueilPageState extends State<AccueilPage> {
       ),
       body: Column(
         children: [
-          Container(
-            margin: EdgeInsets.only(left: 10),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(25),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  spreadRadius: 1,
-                  blurRadius: 3,
-                  offset: Offset(0, 2),
-                ),
-              ],
-            ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: _selectedType,
-                icon: Icon(Icons.keyboard_arrow_down, color: Colors.grey[600]),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedType = newValue!;
-                  });
-                },
-                items: <String>[
-                  'Tous',
-                  'Film',
-                  'Serie',
-                  'Livre',
-                  'BD',
-                  'Comics',
-                  'Mangas'
-                ].map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-              ),
-            ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: 
+          FilterDropdown(
+            selectedType: _selectedType,
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedType = newValue ?? 'Tous'; // Assurez-vous de gérer le cas où newValue est null
+              });
+            },
           ),
-        ),
+          ),
           Expanded(
             child: FutureBuilder<Map<String, dynamic>>(
               future: topLoisirs,
@@ -172,7 +144,7 @@ class _AccueilPageState extends State<AccueilPage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color.fromARGB(255, 8, 163, 111),
+        selectedItemColor: Color.fromARGB(255, 47, 112, 175),
         onTap: _onItemTapped,
       ),
     );

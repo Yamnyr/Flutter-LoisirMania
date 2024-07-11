@@ -18,6 +18,9 @@ class _AddLoisirPageState extends State<AddLoisirPage> {
     {'value': '1', 'label': 'Film'},
     {'value': '2', 'label': 'Série'},
     {'value': '3', 'label': 'Livre'},
+    {'value': '4', 'label': 'BD'},
+    {'value': '5', 'label': 'Comics'},
+    {'value': '6', 'label': 'Manags'},
   ];
   bool _isLoading = false;
 
@@ -75,7 +78,7 @@ class _AddLoisirPageState extends State<AddLoisirPage> {
                       children: [
                         Text(
                           'Nouveau loisir',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Color.fromARGB(255, 47, 112, 175)),
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(height: 16),
