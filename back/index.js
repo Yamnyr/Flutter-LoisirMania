@@ -33,10 +33,10 @@ app.get('/api/index', async (req, res) => {
                 AVG(n.note) AS moyenne_notes
             FROM 
                 loisir l
+            LEFT JOIN 
+                note n ON l.idloisir = n.loisir
             LEFT JOIN
                 type t ON l.type = t.id
-            WHERE 
-                l.idloisir = ?
             GROUP BY 
                 l.idloisir, l.type, t.nom, l.nom, l.images, l.description, l.date_sortie
         `);
@@ -172,7 +172,7 @@ app.post('/api/loisir/:id/note', async (req, res) => {
     try {
         conn = await pool.getConnection();
         const result = await conn.query('INSERT INTO note (loisir, note) VALUES (?, ?)', [id, note]);
-        res.status(200).json({ message: 'Note ajoutée avec succès !'});
+        res.status(200).json({ message: 'Note ajoutée avec succès !' });
         // insertId: result[0].insertId 
     } catch (err) {
         console.log(err);
@@ -215,3 +215,7 @@ app.get('/api/loisir/:id/notes', async (req, res) => {
 app.listen(8000, () => {
     console.log("Serveur à l'écoute sur le port 8000");
 });
+
+
+
+
