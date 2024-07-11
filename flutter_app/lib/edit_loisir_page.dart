@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'app.API/API_loisirs.dart';
+import 'package:intl/intl.dart';
 
 class EditLoisirPage extends StatefulWidget {
   final Map<String, dynamic> loisir;
@@ -52,7 +53,7 @@ class _EditLoisirPageState extends State<EditLoisirPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Loisir mis à jour avec succès!')),
         );
-        Navigator.of(context).pop(true); // Retourne true pour indiquer une mise à jour réussie
+        Navigator.of(context).pop(true);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erreur lors de la mise à jour du loisir: $e')),
@@ -74,60 +75,99 @@ class _EditLoisirPageState extends State<EditLoisirPage> {
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
-              padding: EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    DropdownButtonFormField<String>(
-                      value: _type,
-                      decoration: InputDecoration(labelText: 'Type'),
-                      items: _typeOptions.entries.map((entry) {
-                        return DropdownMenuItem<String>(
-                          value: entry.key,
-                          child: Text(entry.value),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _type = value!;
-                        });
-                      },
-                      validator: (value) => value == null ? 'Champ requis' : null,
+              padding: EdgeInsets.all(16),
+              child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          'Modifier le loisir',
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 16),
+                        DropdownButtonFormField<String>(
+                          value: _type,
+                          decoration: InputDecoration(
+                            labelText: 'Type',
+                            border: OutlineInputBorder(),
+                          ),
+                          items: _typeOptions.entries.map((entry) {
+                            return DropdownMenuItem<String>(
+                              value: entry.key,
+                              child: Text(entry.value),
+                            );
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              _type = value!;
+                            });
+                          },
+                          validator: (value) => value == null ? 'Champ requis' : null,
+                        ),
+                        SizedBox(height: 16),
+                        TextFormField(
+                          initialValue: _nom,
+                          decoration: InputDecoration(
+                            labelText: 'Nom',
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) => value!.isEmpty ? 'Champ requis' : null,
+                          onSaved: (value) => _nom = value!,
+                        ),
+                        SizedBox(height: 16),
+                        TextFormField(
+                          initialValue: _images,
+                          decoration: InputDecoration(
+                            labelText: 'Images (URL)',
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) => value!.isEmpty ? 'Champ requis' : null,
+                          onSaved: (value) => _images = value!,
+                        ),
+                        SizedBox(height: 16),
+                        TextFormField(
+                          initialValue: _description,
+                          decoration: InputDecoration(
+                            labelText: 'Description',
+                            border: OutlineInputBorder(),
+                          ),
+                          maxLines: 3,
+                          validator: (value) => value!.isEmpty ? 'Champ requis' : null,
+                          onSaved: (value) => _description = value!,
+                        ),
+                        SizedBox(height: 16),
+                        InputDatePickerFormField(
+                          firstDate: DateTime(1900),
+                          lastDate: DateTime.now(),
+                          initialDate: _dateSortie,
+                          fieldLabelText: 'Date de sortie',
+                          errorFormatText: 'Format de date invalide',
+                          errorInvalidText: 'Date invalide',
+                          fieldHintText: 'JJ/MM/AAAA',
+                          onDateSaved: (value) => _dateSortie = value,
+                        ),
+                        SizedBox(height: 24),
+                        ElevatedButton(
+                          onPressed: _submitForm,
+                          child: Text('Mettre à jour le loisir'),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Color.fromARGB(255, 128, 100, 145),
+                            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                          ),
+                        ),
+                      ],
                     ),
-                    TextFormField(
-                      initialValue: _nom,
-                      decoration: InputDecoration(labelText: 'Nom'),
-                      validator: (value) => value!.isEmpty ? 'Champ requis' : null,
-                      onSaved: (value) => _nom = value!,
-                    ),
-                    TextFormField(
-                      initialValue: _images,
-                      decoration: InputDecoration(labelText: 'Images (URL)'),
-                      validator: (value) => value!.isEmpty ? 'Champ requis' : null,
-                      onSaved: (value) => _images = value!,
-                    ),
-                    TextFormField(
-                      initialValue: _description,
-                      decoration: InputDecoration(labelText: 'Description'),
-                      maxLines: 3,
-                      validator: (value) => value!.isEmpty ? 'Champ requis' : null,
-                      onSaved: (value) => _description = value!,
-                    ),
-                    InputDatePickerFormField(
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(9999),
-                      initialDate: _dateSortie,
-                      fieldLabelText: 'Date de sortie',
-                      onDateSaved: (value) => _dateSortie = value,
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _submitForm,
-                      child: Text('Mettre à jour le loisir'),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),

@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.pink,
           scaffoldBackgroundColor: Color.fromARGB(255, 185, 132, 140),
       ),
-      home: ListLoisirPage(),
+      home: AccueilPage(),
       routes: {
         '/accueil': (context) =>  AccueilPage(),
         '/list_loisir': (context) => ListLoisirPage(),

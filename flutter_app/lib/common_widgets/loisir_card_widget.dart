@@ -48,10 +48,19 @@ class LoisirCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Text(
-                        loisir['nom'],
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            loisir['nom'],
+                            style: TextStyle(color: Color.fromARGB(255, 47, 112, 175), fontSize: 20, fontWeight: FontWeight.bold),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            'Type: ${loisir['nom_type']}',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ],
                       ),
                     ),
                     RatingBarIndicator(
@@ -87,7 +96,7 @@ class LoisirCard extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => ShowLoisirPage(loisir: loisir),
                           ),
-                        );
+                        ).then((value) => onEditLoisir());
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white, backgroundColor: Color.fromARGB(255, 128, 100, 145),

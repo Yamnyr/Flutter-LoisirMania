@@ -101,7 +101,7 @@ class _ShowLoisirPageState extends State<ShowLoisirPage> {
                             children: [
                               Text(
                                 loisir['nom'],
-                                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                               Row(
                                 children: [
@@ -122,7 +122,7 @@ class _ShowLoisirPageState extends State<ShowLoisirPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Type: ${loisir['type']}'),
+                              Text('Type: ${loisir['nom_type']}'),
                               Text('$formattedDate'),
                             ],
                           ),
@@ -136,7 +136,7 @@ class _ShowLoisirPageState extends State<ShowLoisirPage> {
                               children: [
                                 Text(
                                   'Ajouter une note:',
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(height: 8),
                                 RatingBar.builder(
@@ -172,7 +172,6 @@ class _ShowLoisirPageState extends State<ShowLoisirPage> {
                         ],
                       ),
                     ),
-
                   ],
                 ),
               ),

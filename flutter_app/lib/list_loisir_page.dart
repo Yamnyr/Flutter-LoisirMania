@@ -29,7 +29,7 @@ class _ListLoisirPageState extends State<ListLoisirPage> {
     if (sortOption == 'Alphabetique') {
       loisirsList.sort((a, b) => a['nom'].compareTo(b['nom']));
     } else if (sortOption == 'Date') {
-      loisirsList.sort((a, b) => a['date_sortie'].compareTo(b['date_sortie']));
+      loisirsList.sort((a, b) => DateTime.parse(b['date_sortie']).compareTo(DateTime.parse(a['date_sortie'])));
     }
   }
 
@@ -42,8 +42,8 @@ class _ListLoisirPageState extends State<ListLoisirPage> {
       setState(() {
         loisirs = APILoisirs.getAllLoisirs().then((list) {
           return list.where((loisir) =>
-              (loisir['type'] != null &&
-                      loisir['type']
+              (loisir['nom_type'] != null &&
+                      loisir['nom_type']
                           .toString()
                           .toLowerCase()
                           .contains(query.toLowerCase())) ||
@@ -51,7 +51,9 @@ class _ListLoisirPageState extends State<ListLoisirPage> {
                       loisir['nom']
                           .toString()
                           .toLowerCase()
-                          .contains(query.toLowerCase()))).toList();
+                          .contains(query.toLowerCase() )
+                  )
+            ).toList();
         });
       });
     }
@@ -95,7 +97,7 @@ class _ListLoisirPageState extends State<ListLoisirPage> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
                 SearchBarr(
@@ -108,7 +110,7 @@ class _ListLoisirPageState extends State<ListLoisirPage> {
                     _searchLoisirs('');
                   },
                 ),
-                SortDropdown(
+                SortButton(
                   value: sortOption,
                   onChanged: (String? newValue) {
                     setState(() {
@@ -144,8 +146,8 @@ class _ListLoisirPageState extends State<ListLoisirPage> {
                       return LoisirCard(
                         loisir: loisir,
                         onEditLoisir: _refreshList,
-                        );
-                      }
+                      );
+                    },
                   );
                 }
               },

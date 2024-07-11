@@ -177,7 +177,7 @@ app.put('/api/loisir/:id', async (req, res) => {
         if (conn) conn.release();
     }
 });
-//ajouter des notes 
+//ajouter des notes
 app.post('/api/loisir/:id/note', async (req, res) => {
     let conn;
     let id = req.params.id;
@@ -192,7 +192,7 @@ app.post('/api/loisir/:id/note', async (req, res) => {
         conn = await pool.getConnection();
         const result = await conn.query('INSERT INTO note (loisir, note) VALUES (?, ?)', [id, note]);
         res.status(200).json({ message: 'Note ajoutée avec succès !' });
-        // insertId: result[0].insertId 
+        // insertId: result[0].insertId
     } catch (err) {
         console.log(err);
         res.status(400).json({ message: 'Erreur lors de l\'ajout de la note !' });
