@@ -19,15 +19,18 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données :  `blibliotheque`
+-- Base de données :  `blibliotheque`;
 --
 
 -- --------------------------------------------------------
 
 --
--- Structure de la table `loisir`
+-- Structure de la table `loisir`;
 --
 
+DROP DATABASE IF EXISTS `blibliotheque`;
+CREATE DATABASE IF NOT EXISTS `blibliotheque`;
+USE `blibliotheque`;
 DROP TABLE IF EXISTS `loisir`;
 CREATE TABLE IF NOT EXISTS `loisir` (
   `idloisir` int(11) NOT NULL AUTO_INCREMENT,
@@ -68,10 +71,10 @@ CREATE TABLE IF NOT EXISTS `note` (
 --
 
 INSERT INTO `note` (`id`, `loisir`, `note`) VALUES
-(1, 1, 20),
-(2, 1, 0),
-(3, 2, 20),
-(4, 2, 20);
+(1, 1, 4),
+(2, 1, 2),
+(3, 2, 3),
+(4, 2, 5);
 
 -- --------------------------------------------------------
 
