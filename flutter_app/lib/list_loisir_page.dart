@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/common_widgets/addloisir_card_widget.dart';
 import 'package:flutter_app/show_loisir_page.dart';
 import 'edit_loisir_page.dart';
 import 'add_loisir_page.dart';
 import 'app.API/API_loisirs.dart';
+import 'common_widgets/searchbar_widget.dart';
+import 'common_widgets/sort_dropdownwidget.dart';
+import 'common_widgets/loisir_card_widget.dart';
 
 class ListLoisirPage extends StatefulWidget {
   @override
@@ -11,6 +15,9 @@ class ListLoisirPage extends StatefulWidget {
 
 class _ListLoisirPageState extends State<ListLoisirPage> {
   late Future<List> loisirs;
+  String sortOption = 'Alphabetique';
+  TextEditingController searchController = TextEditingController();
+  int _selectedIndex = 0; // Index for bottom navigation bar
 
   @override
   void initState() {
@@ -18,114 +25,152 @@ class _ListLoisirPageState extends State<ListLoisirPage> {
     loisirs = APILoisirs.getAllLoisirs();
   }
 
+  void _sortLoisirs(List loisirsList) {
+    if (sortOption == 'Alphabetique') {
+      loisirsList.sort((a, b) => a['nom'].compareTo(b['nom']));
+    } else if (sortOption == 'Date') {
+      loisirsList.sort((a, b) => a['date_sortie'].compareTo(b['date_sortie']));
+    }
+  }
+
+  void _searchLoisirs(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        loisirs = APILoisirs.getAllLoisirs();
+      });
+    } else {
+      setState(() {
+        loisirs = APILoisirs.getAllLoisirs().then((list) {
+          return list.where((loisir) =>
+              (loisir['type'] != null &&
+                      loisir['type']
+                          .toString()
+                          .toLowerCase()
+                          .contains(query.toLowerCase())) ||
+                  (loisir['nom'] != null &&
+                      loisir['nom']
+                          .toString()
+                          .toLowerCase()
+                          .contains(query.toLowerCase()))).toList();
+        });
+      });
+    }
+  }
+
+  void _refreshList() {
+    setState(() {
+      loisirs = APILoisirs.getAllLoisirs();
+    });
+  }
+
+  void _onItemTapped(int index) {
+    switch (index) {
+      case 0:
+        Navigator.pushReplacementNamed(context, '/accueil');
+        break;
+      case 1:
+        Navigator.pushReplacementNamed(context, '/list_loisir');
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddLoisirPage()),
+        ).then((value) {
+          _refreshList();
+        });
+        break;
+      default:
+    }
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Liste des Loisirs'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddLoisirPage()),
-              ).then((value) {
-                setState(() {
-                  loisirs = APILoisirs.getAllLoisirs();
-                });
-              });
-            },
-          ),
-        ],
       ),
-      body: FutureBuilder<List>(
-        future: loisirs,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Erreur: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Aucun loisir disponible.'));
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data!.length + 1,
-              itemBuilder: (context, index) {
-                if (index == snapshot.data!.length) {
-                  return Card(
-                    color: Color.fromARGB(255, 8, 163, 111),
-                    elevation: 3.0,
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: ListTile(
-                      title: Text(
-                        'Ajouter un nouveau loisir',
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
-                      ),
-                      trailing: Icon(Icons.add, color: Colors.white),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AddLoisirPage()),
-                        ).then((value) {
-                          setState(() {
-                            loisirs = APILoisirs.getAllLoisirs();
-                          });
-                        });
-                      },
-                    ),
-                  );
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                SearchBarr(
+                  searchController: searchController,
+                  onChanged: (value) {
+                    _searchLoisirs(value);
+                  },
+                  onClear: () {
+                    searchController.clear();
+                    _searchLoisirs('');
+                  },
+                ),
+                SortDropdown(
+                  value: sortOption,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      sortOption = newValue!;
+                      loisirs = APILoisirs.getAllLoisirs().then((list) {
+                        _sortLoisirs(list);
+                        return list;
+                      });
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<List>(
+              future: loisirs,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Erreur: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('Aucun loisir disponible.'));
                 } else {
-                  var loisir = snapshot.data![index];
-                  return Card(
-                    elevation: 3.0,
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: ListTile(
-                      title: Text(
-                        loisir['nom'],
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                      ),
-                      subtitle: Text(loisir['description']),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.visibility),
-                            color: Color.fromARGB(255, 8, 163, 111),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ShowLoisirPage(loisir: loisir),
-                                ),
-                              );
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            color: Color.fromARGB(255, 8, 163, 111),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => EditLoisirPage(loisir: loisir),
-                                ),
-                              ).then((value) {
-                                setState(() {
-                                  loisirs = APILoisirs.getAllLoisirs();
-                                });
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+                  List sortedLoisirs = snapshot.data!;
+                  _sortLoisirs(sortedLoisirs);
+
+                  return ListView.builder(
+                    itemCount: sortedLoisirs.length,
+                    itemBuilder: (context, index) {
+                      var loisir = sortedLoisirs[index];
+                      return LoisirCard(
+                        loisir: loisir,
+                        onEditLoisir: _refreshList,
+                        );
+                      }
                   );
                 }
               },
-            );
-          }
-        },
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Accueil',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Liste',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: 'Ajouter',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Color.fromARGB(255, 8, 163, 111),
+        onTap: _onItemTapped,
       ),
     );
   }

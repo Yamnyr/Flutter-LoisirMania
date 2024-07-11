@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/common_widgets/addloisir_card_widget.dart';
 import 'package:flutter_app/show_loisir_page.dart';
 import 'edit_loisir_page.dart';
 import 'add_loisir_page.dart';
 import 'app.API/API_loisirs.dart';
+import 'common_widgets/searchbar_widget.dart';
+import 'common_widgets/sort_dropdownwidget.dart';
+import 'common_widgets/loisir_card_widget.dart';
 
 class AccueilPage extends StatefulWidget {
   @override
@@ -11,18 +15,60 @@ class AccueilPage extends StatefulWidget {
 
 class _AccueilPageState extends State<AccueilPage> {
   late Future<Map<String, dynamic>> topLoisirs;
+  String sortOption = 'Alphabetique';
+  TextEditingController searchController = TextEditingController();
+  int _selectedIndex = 0; // Index for bottom navigation bar
 
   @override
   void initState() {
     super.initState();
-    topLoisirs = APILoisirs.getTop5ByType();
+    topLoisirs = APILoisirs.getTop5ByType(); // Use getTop5ByType instead of getAllLoisirs
+  }
+
+  void _sortLoisirs(List loisirsList) {
+    if (sortOption == 'Alphabetique') {
+      loisirsList.sort((a, b) => a['nom'].compareTo(b['nom']));
+    } else if (sortOption == 'Date') {
+      loisirsList.sort((a, b) => a['date_sortie'].compareTo(b['date_sortie']));
+    }
+  }
+
+  void _refreshList() {
+    setState(() {
+      topLoisirs = APILoisirs.getTop5ByType(); // Refresh the top loisirs list
+    });
+  }
+
+  void _onItemTapped(int index) {
+    switch (index) {
+      case 0:
+        // Accueil (current page)
+        break;
+      case 1:
+        // Liste des loisirs
+        Navigator.pushReplacementNamed(context, '/list_loisir');
+        break;
+      case 2:
+        // Ajout de loisir
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => AddLoisirPage()),
+        ).then((value) {
+          _refreshList();
+        });
+        break;
+      default:
+    }
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Top 5 des Loisirs'),
+        title: Text('Accueil'),
         actions: [
           IconButton(
             icon: Icon(Icons.add),
@@ -31,114 +77,63 @@ class _AccueilPageState extends State<AccueilPage> {
                 context,
                 MaterialPageRoute(builder: (context) => AddLoisirPage()),
               ).then((value) {
-                setState(() {
-                  topLoisirs = APILoisirs.getTop5ByType();
-                });
+                _refreshList();
               });
             },
           ),
         ],
       ),
-      body: FutureBuilder<Map<String, dynamic>>(
-        future: topLoisirs,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Erreur: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('Aucun loisir disponible.'));
-          } else {
-            return ListView.builder(
-              itemCount: snapshot.data!.length + 1,
-              itemBuilder: (context, index) {
-                if (index == snapshot.data!.length) {
-                  return Card(
-                    color: Color.fromARGB(255, 8, 163, 111),
-                    elevation: 3.0,
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: ListTile(
-                      title: Text(
-                        'Ajouter un nouveau loisir',
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900),
-                      ),
-                      trailing: Icon(Icons.add, color: Colors.white),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => AddLoisirPage()),
-                        ).then((value) {
-                          setState(() {
-                            topLoisirs = APILoisirs.getTop5ByType();
-                          });
-                        });
-                      },
-                    ),
-                  );
+      body: Column(
+        children: [
+          // Search and Sort widgets can be added if necessary
+          Expanded(
+            child: FutureBuilder<Map<String, dynamic>>(
+              future: topLoisirs,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Erreur: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('Aucun loisir disponible.'));
                 } else {
-                  String type = snapshot.data!.keys.elementAt(index);
-                  List loisirs = snapshot.data![type];
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          'Top 5 $type',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      ...loisirs.map((loisir) => Card(
-                        elevation: 3.0,
-                        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: ListTile(
-                          title: Text(
-                            loisir['nom'],
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                          ),
-                          subtitle: Text(loisir['description']),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.visibility),
-                                color: Color.fromARGB(255, 8, 163, 111),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ShowLoisirPage(loisir: loisir),
-                                    ),
-                                  );
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.edit),
-                                color: Color.fromARGB(255, 8, 163, 111),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditLoisirPage(loisir: loisir),
-                                    ),
-                                  ).then((value) {
-                                    setState(() {
-                                      topLoisirs = APILoisirs.getTop5ByType();
-                                    });
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      )).toList(),
-                    ],
+                  List<dynamic> sortedLoisirs = snapshot.data!.values.toList();
+                  _sortLoisirs(sortedLoisirs);
+
+                  return ListView.builder(
+                    itemCount: sortedLoisirs.length,
+                    itemBuilder: (context, index) {
+                      var loisir = sortedLoisirs[index];
+                      return LoisirCard(
+                        loisir: loisir,
+                        onEditLoisir: _refreshList,
+                      );
+                    },
                   );
                 }
               },
-            );
-          }
-        },
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Accueil',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Liste',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: 'Ajouter',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
       ),
     );
   }

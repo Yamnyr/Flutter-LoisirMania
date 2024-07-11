@@ -12,12 +12,14 @@ class MyApp extends StatelessWidget {
       title: 'Loisir',
       theme: ThemeData(
         primaryColor: Colors.pink,
+          scaffoldBackgroundColor: Color.fromARGB(255, 185, 132, 140),
       ),
       home: ListLoisirPage(),
       routes: {
-        '/accueil': (context) =>  ListLoisirPage(),
+        '/accueil': (context) =>  AccueilPage(),
         '/list_loisir': (context) => ListLoisirPage(),
       },
     );
   }
 }
+  

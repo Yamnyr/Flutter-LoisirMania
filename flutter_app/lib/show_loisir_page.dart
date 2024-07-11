@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:intl/intl.dart';
 import 'app.API/API_loisirs.dart';
 
 class ShowLoisirPage extends StatefulWidget {
@@ -21,7 +23,7 @@ class _ShowLoisirPageState extends State<ShowLoisirPage> {
     loisirDetails = APILoisirs.getLoisirById(widget.loisir['idloisir']);
   }
 
-Future<void> _submitNote() async {
+  Future<void> _submitNote() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       try {
@@ -43,7 +45,6 @@ Future<void> _submitNote() async {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,69 +62,119 @@ Future<void> _submitNote() async {
             return Center(child: Text('Aucune donnée disponible.'));
           } else {
             var loisir = snapshot.data!;
+            // Formattez la date ici
+            var dateFormatter = DateFormat('dd MMMM yyyy');
+            var formattedDate = dateFormatter.format(DateTime.parse(loisir['date_sortie']));
             return SingleChildScrollView(
-              padding: EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    loisir['nom'],
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 16),
-                  Text('Type: ${loisir['type']}'),
-                  SizedBox(height: 8),
-                  Text('Date de sortie: ${loisir['date_sortie']}'),
-                  SizedBox(height: 16),
-                  Text(
-                    'Description:',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 8),
-                  Text(loisir['description']),
-                  SizedBox(height: 16),
-                  if (loisir['images'] != null && loisir['images'].isNotEmpty)
-                    Image.network(
-                      loisir['images'],
-                      height: 200,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
+              padding: EdgeInsets.all(16),
+              child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Image
+                    ClipRRect(
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                      child: loisir['images'] != null && loisir['images'].isNotEmpty
+                          ? Image.network(
+                              loisir['images'],
+                              height: 600,
+                              fit: BoxFit.cover,
+                            )
+                          : Container(
+                              height: 300,
+                              color: Colors.grey[300],
+                              child: Icon(Icons.image_not_supported, size: 100),
+                            ),
                     ),
-                  SizedBox(height: 16),
-                  Text(
-                    'Note moyenne: ${loisir['moyenne_notes'] ?? 'Pas encore noté'}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 16),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        DropdownButtonFormField<int>(
-                          decoration: InputDecoration(labelText: 'Votre note'),
-                          items: List.generate(5, (index) => index + 1).map((int value) {
-                            return DropdownMenuItem<int>(
-                              value: value,
-                              child: Text(value.toString()),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedNote = value;
-                            });
-                          },
-                          validator: (value) => value == null ? 'Champ requis' : null,
-                        ),
-                        SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: _submitNote,
-                          child: Text('Ajouter la note'),
-                        ),
-                      ],
+                    // Informations
+                    Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                loisir['nom'],
+                                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                              ),
+                              Row(
+                                children: [
+                                  RatingBarIndicator(
+                                    rating: loisir['moyenne_notes'] != null 
+                                        ? double.parse(loisir['moyenne_notes'].toString()) 
+                                        : 0.0,
+                                    itemBuilder: (context, index) => Icon(Icons.star, color: Color.fromARGB(255, 47, 112, 175)),
+                                    itemCount: 5,
+                                    itemSize: 20.0,
+                                  ),
+                                  SizedBox(width: 8),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Type: ${loisir['type']}'),
+                              Text('$formattedDate'),
+                            ],
+                          ),
+                          SizedBox(height: 16),
+                          Text(loisir['description']),
+                          SizedBox(height: 24),
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Ajouter une note:',
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 8),
+                                RatingBar.builder(
+                                  initialRating: 0,
+                                  minRating: 1,
+                                  direction: Axis.horizontal,
+                                  allowHalfRating: false,
+                                  itemCount: 5,
+                                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                  itemBuilder: (context, _) => Icon(
+                                    Icons.star,
+                                    color: Color.fromARGB(255, 47, 112, 175),
+                                  ),
+                                  onRatingUpdate: (rating) {
+                                    setState(() {
+                                      _selectedNote = rating.toInt();
+                                    });
+                                  },
+                                ),
+                                SizedBox(height: 8),
+                                SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: _submitNote,
+                                  child: Text('Ajouter la note'),
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.white, backgroundColor: Color.fromARGB(255, 128, 100, 145),
+                                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+
+                  ],
+                ),
               ),
             );
           }
