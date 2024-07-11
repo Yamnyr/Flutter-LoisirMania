@@ -41,7 +41,7 @@ app.get('/api/index', async (req, res) => {
                 l.idloisir, l.type, t.nom, l.nom, l.images, l.description, l.date_sortie
         `);
         const groupedByType = rows[0].reduce((acc, loisir) => {
-            const type = loisir.type;
+            const type = loisir.nom_type;
             if (!acc[type]) {
                 acc[type] = [];
             }
@@ -70,7 +70,26 @@ app.get('/api/loisirs', async (req, res) => {
     let conn;
     try {
         conn = await pool.getConnection();
-        const rows = await conn.query('SELECT l.idloisir, l.type, l.nom, l.images, l.description, l.date_sortie, AVG(n.note) AS moyenne_notes FROM loisir l LEFT JOIN note n ON l.idloisir = n.loisir GROUP BY l.idloisir, l.type, l.nom, l.images, l.description, l.date_sortie order by l.nom ASC');
+        const rows = await conn.query(`
+            SELECT 
+                l.idloisir, 
+                t.nom AS nom_type, 
+                l.nom, 
+                l.images, 
+                l.description, 
+                l.date_sortie, 
+                AVG(n.note) AS moyenne_notes 
+            FROM 
+                loisir l 
+            LEFT JOIN 
+                note n ON l.idloisir = n.loisir 
+            LEFT JOIN 
+                type t ON l.type = t.id 
+            GROUP BY 
+                l.idloisir, t.nom, l.nom, l.images, l.description, l.date_sortie 
+            ORDER BY 
+                l.nom ASC
+        `);
         res.status(200).json(rows[0]);
     } catch (err) {
         console.log(err);
